@@ -10,6 +10,14 @@ class User(db.Model):
     username = db.Column(db.String(250), nullable=False, unique=True)
     email = db.Column(db.String(250), nullable=False, unique=True)
     password = db.Column(db.String(250))
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "username": self.username,
+            "email": self.email
+        }
       
 class Character(db.Model):
     __tablename__ = 'character'
@@ -18,7 +26,16 @@ class Character(db.Model):
     name = db.Column(db.String(250), nullable=False)
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(250), nullable=False)
-    skin_color = db.Column(db.String(250), nullable=False)    
+    skin_color = db.Column(db.String(250), nullable=False)
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "age": self.age,
+            "gender": self.gender,
+            "skin_color": self.skin_color
+        } 
 
 class Planet(db.Model):
     __tablename__ = 'planet'
@@ -30,6 +47,16 @@ class Planet(db.Model):
     climate = db.Column(db.String(250), nullable=False)
     terrain = db.Column(db.String(250), nullable=False)
     
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "gravity": self.gravity,
+            "population": self.population,
+            "climate": self.climate,
+            "terrain": self.terrain
+        }     
+        
 class Vehicle(db.Model):
     __tablename__ = 'vehicle'
 
@@ -38,6 +65,15 @@ class Vehicle(db.Model):
     model = db.Column(db.String(250), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     vehicle_class = db.Column(db.String(250), nullable=False)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "model": self.model,
+            "capacity": self.capacity,
+            "vehicle_class": self.vehicle_class
+        }     
 
 class Favorite(db.Model):
     __tablename__ = 'favorite'
@@ -52,12 +88,21 @@ class Favorite(db.Model):
     vehicle_id = db.Column(db.Integer, db.ForeignKey("vehicle.id"))
     vehicle = db.relationship(Vehicle)
 
-    def __repr__(self):
-        return '<User %r>' % self.username
-
     def serialize(self):
         return {
             "id": self.id,
-            "email": self.email,
-            # do not serialize the password, its a security breach
-        }
+            "user_id": self.user_id,
+            "character_id": self.character_id,
+            "planet_id": self.planet_id,
+            "vehicle_id": self.vehicle_id
+        }    
+
+    # def __repr__(self):
+    #     return '<User %r>' % self.username
+
+    # def serialize(self):
+    #     return {
+    #         "id": self.id,
+    #         "email": self.email,
+    #         # do not serialize the password, its a security breach
+    #     }
