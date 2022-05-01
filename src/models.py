@@ -97,8 +97,8 @@ class Favorite(db.Model):
             "vehicle_id": self.vehicle_id
         }    
 
-    # def __repr__(self):
-    #     return '<User %r>' % self.username
+    #def __repr__(self):
+    #    return '<User %r>' % self.username
 
     # def serialize(self):
     #     return {
