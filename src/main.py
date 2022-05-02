@@ -59,6 +59,14 @@ def get_one_user(user_id):
     user = User.query.filter_by(id=user_id).first() 
     return jsonify ({"response": user.serialize()}), 200
 
+@app.route('/user/<int:user_id>', methods=['DELETE'])
+def delete_one_user(user_id):
+    user = User.query.filter_by(id = user_id).first() 
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify ({"deleted":True}), 200
+
+
 @app.route('/character', methods=['GET'])
 def get_all_characters():
     characters = Character.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
