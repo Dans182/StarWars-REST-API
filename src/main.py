@@ -44,16 +44,15 @@ def create_user():
     body_email = request.json.get("email")
     body_password = request.json.get("password")
     user = User(name = body_name, username = body_username, email = body_email, password = body_password)
-    db.session.add(User)
+    db.session.add(user)
     db.session.commit()
     return jsonify({"name" : user.name, "msg" : "creado el usuario con id: " + str(user.id)}), 200
-
 
 @app.route('/user', methods=['GET'])
 def get_all_users():
     users = User.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
     users_serialized = list(map(lambda x: x.serialize(), users))
-    return jsonify ({"response": user.name}), 200
+    return jsonify ({"response": users_serialized}), 200
 
 @app.route('/user/<int:user_id>', methods=['GET'])
 def get_one_user(user_id):
