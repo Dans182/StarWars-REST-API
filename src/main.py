@@ -9,7 +9,7 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
 from models import  db, User, Character, Planet, Vehicle, Favorite
-#from models import Person
+#from models import User, Character, Planet, Vehicle, Favorite
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -95,17 +95,65 @@ def delete_one_character(character_id):
     db.session.commit()
     return jsonify ({"deleted":True}), 200
 
+@app.route('/planet', methods=['POST'])
+def create_planet():
+    body_name = request.json.get("name")
+    body_gravity = request.json.get("gravity")
+    body_population = request.json.get("population")
+    body_climate = request.json.get("climate")
+    body_terrain = request.json.get("terrain")
+    planet = Planet(name = body_name, gravity = body_gravity, population = body_population, climate = body_climate, terrain = body_terrain)
+    db.session.add(planet)
+    db.session.commit()
+    return jsonify({"name" : planet.name, "msg" : "creado el planet con id: " + str(planet.id)}), 200
+
 @app.route('/planet', methods=['GET'])
 def get_all_planets():
     planets = Planet.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
     planets_serialized = list(map(lambda x: x.serialize(), planets))
     return jsonify ({"response": planets_serialized}), 200
 
+@app.route('/planet/<int:planet_id>', methods=['GET'])
+def get_one_planet(planet_id):
+    planet = Planet.query.filter_by(id=planet_id).first() 
+    return jsonify ({"response": planet.serialize()}), 200
+
+@app.route('/planet/<int:planet_id>', methods=['DELETE'])
+def delete_one_planet(planet_id):
+    planet = Planet.query.filter_by(id = planet_id).first() 
+    db.session.delete(planet)
+    db.session.commit()
+    return jsonify ({"deleted":True}), 200
+
+@app.route('/vehicle', methods=['POST'])
+def create_vehicle():
+    body_name = request.json.get("name")
+    body_gravity = request.json.get("gravity")
+    body_population = request.json.get("population")
+    body_climate = request.json.get("climate")
+    body_terrain = request.json.get("terrain")
+    vehicle = Vehicle(name = body_name, gravity = body_gravity, population = body_population, climate = body_climate, terrain = body_terrain)
+    db.session.add(vehicle)
+    db.session.commit()
+    return jsonify({"name" : vehicle.name, "msg" : "creado el vehicle con id: " + str(vehicle.id)}), 200
+
 @app.route('/vehicle', methods=['GET'])
 def get_all_vehicles():
     vehicles = Vehicle.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
     vehicles_serialized = list(map(lambda x: x.serialize(), vehicles))
     return jsonify ({"response": vehicles_serialized}), 200
+
+@app.route('/vehicle/<int:vehicle_id>', methods=['GET'])
+def get_one_vehicle(vehicle_id):
+    vehicle = Vehicle.query.filter_by(id=vehicle_id).first() 
+    return jsonify ({"response": vehicle.serialize()}), 200
+
+@app.route('/vehicle/<int:vehicle_id>', methods=['DELETE'])
+def delete_one_vehicle(vehicle_id):
+    vehicle = Vehicle.query.filter_by(id = vehicle_id).first() 
+    db.session.delete(vehicle)
+    db.session.commit()
+    return jsonify ({"deleted":True}), 200
 
 @app.route('/favorite', methods=['GET'])
 def get_all_favorites():
