@@ -66,12 +66,34 @@ def delete_one_user(user_id):
     db.session.commit()
     return jsonify ({"deleted":True}), 200
 
+@app.route('/character', methods=['POST'])
+def create_character():
+    body_name = request.json.get("name")
+    body_age = request.json.get("age")
+    body_gender = request.json.get("gender")
+    body_skin_color = request.json.get("skin_color")
+    character = Character(name = body_name, age = body_age, gender = body_gender, skin_color = body_skin_color)
+    db.session.add(character)
+    db.session.commit()
+    return jsonify({"name" : character.name, "msg" : "creado el character con id: " + str(character.id)}), 200
 
 @app.route('/character', methods=['GET'])
 def get_all_characters():
     characters = Character.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
     characters_serialized = list(map(lambda x: x.serialize(), characters))
     return jsonify ({"response": characters_serialized}), 200
+
+@app.route('/character/<int:character_id>', methods=['GET'])
+def get_one_character(character_id):
+    character = Character.query.filter_by(id=character_id).first() 
+    return jsonify ({"response": character.serialize()}), 200
+
+@app.route('/character/<int:character_id>', methods=['DELETE'])
+def delete_one_character(character_id):
+    character = Character.query.filter_by(id = character_id).first() 
+    db.session.delete(character)
+    db.session.commit()
+    return jsonify ({"deleted":True}), 200
 
 @app.route('/planet', methods=['GET'])
 def get_all_planets():
