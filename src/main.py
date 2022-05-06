@@ -66,6 +66,14 @@ def delete_one_user(user_id):
     db.session.commit()
     return jsonify ({"deleted":True}), 200
 
+@app.route('/user/<int:user_id>/favorite/character/<int:ch_id>', methods=['POST'])
+def favorite_character(ch_id, user_id):
+    user = User.query.get(user_id)
+    new_fav = Favorite(user_id = user_id, character_id = ch_id)
+    db.session.add(new_fav)
+    db.session.commit()
+    return jsonify ({"created": True, "character": new_fav.serialize()}), 200
+
 @app.route('/character', methods=['POST'])
 def create_character():
     body_name = request.json.get("name")
@@ -160,6 +168,9 @@ def get_all_favorites():
     favorites = Favorite.query.all() #esto me devuelve una lista de instancia de clases, que hay que hacerles serialize
     favorites_serialized = list(map(lambda x: x.serialize(), favorites))
     return jsonify ({"response": favorites_serialized}), 200
+
+
+
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
