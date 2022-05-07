@@ -74,6 +74,14 @@ def favorite_character(ch_id, user_id):
     db.session.commit()
     return jsonify ({"created": True, "character": new_fav.serialize()}), 200
 
+@app.route('/user/<int:user_id>/favorite/planet/<int:pl_id>', methods=['POST'])
+def favorite_planet(pl_id, user_id):
+    user = User.query.get(user_id)
+    new_fav = Favorite(user_id = user_id, planet_id = pl_id)
+    db.session.add(new_fav)
+    db.session.commit()
+    return jsonify ({"created": True, "planet": new_fav.serialize()}), 200
+
 @app.route('/character', methods=['POST'])
 def create_character():
     body_name = request.json.get("name")
