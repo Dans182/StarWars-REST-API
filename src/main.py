@@ -30,6 +30,9 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+#ENDPOINTS DE USER (POST, GET, GET ONE, DELETE, POST CHARACTER/PLANET/VEHICLE FAVORITE
+# DELETE CHARACTER/PLANET/VEHICLE FAVORITE)
+
 @app.route('/user', methods=['POST'])
 def create_user():
     #aca vendría lo que se indica desde React
@@ -111,6 +114,8 @@ def delete_favorite_vehicle_by_id(vh_id, user_id):
     db.session.commit()
     return jsonify({"deleted": True}), 200
 
+#ENDPOINTS DE CHARACTER (POST, GET, GET ONE, DELETE)
+
 @app.route('/character', methods=['POST'])
 def create_character():
     body_name = request.json.get("name")
@@ -139,6 +144,8 @@ def delete_one_character(character_id):
     db.session.delete(character)
     db.session.commit()
     return jsonify ({"deleted":True}), 200
+
+#ENDPOINTS DE PLANET (POST, GET, GET ONE, DELETE)
 
 @app.route('/planet', methods=['POST'])
 def create_planet():
@@ -170,6 +177,8 @@ def delete_one_planet(planet_id):
     db.session.commit()
     return jsonify ({"deleted":True}), 200
 
+#ENDPOINTS DE VEHICLE (POST, GET, GET ONE, DELETE)
+
 @app.route('/vehicle', methods=['POST'])
 def create_vehicle():
     body_name = request.json.get("name")
@@ -199,6 +208,8 @@ def delete_one_vehicle(vehicle_id):
     db.session.delete(vehicle)
     db.session.commit()
     return jsonify ({"deleted":True}), 200
+
+#ENDPOINT DE GET FAVORITE
 
 @app.route('/favorite', methods=['GET'])
 def get_all_favorites():
