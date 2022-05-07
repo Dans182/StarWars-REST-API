@@ -90,6 +90,27 @@ def favorite_vehicle(vh_id, user_id):
     db.session.commit()
     return jsonify ({"created": True, "vehicle": new_fav.serialize()}), 200
 
+@app.route('/user/<int:user_id>/favorite/character/<int:ch_id>', methods=['DELETE'])
+def delete_favorite_character_by_id(ch_id, user_id):
+    fav = Favorite.query.filter_by(user_id = user_id).filter_by(character_id = ch_id).first()
+    db.session.delete(fav)
+    db.session.commit()
+    return jsonify({"deleted": True}), 200
+
+@app.route('/user/<int:user_id>/favorite/planet/<int:pl_id>', methods=['DELETE'])
+def delete_favorite_planet_by_id(pl_id, user_id):
+    fav = Favorite.query.filter_by(user_id = user_id).filter_by(planet_id = pl_id).first()
+    db.session.delete(fav)
+    db.session.commit()
+    return jsonify({"deleted": True}), 200
+
+@app.route('/user/<int:user_id>/favorite/vehicle/<int:vh_id>', methods=['DELETE'])
+def delete_favorite_vehicle_by_id(vh_id, user_id):
+    fav = Favorite.query.filter_by(user_id = user_id).filter_by(vehicle_id = vh_id).first()
+    db.session.delete(fav)
+    db.session.commit()
+    return jsonify({"deleted": True}), 200
+
 @app.route('/character', methods=['POST'])
 def create_character():
     body_name = request.json.get("name")
