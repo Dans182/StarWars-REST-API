@@ -185,9 +185,6 @@ def get_all_favorites():
     favorites_serialized = list(map(lambda x: x.serialize(), favorites))
     return jsonify ({"response": favorites_serialized}), 200
 
-
-
-
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
