@@ -33,12 +33,6 @@ def sitemap():
 #ENDPOINTS DE USER (POST, GET, GET ONE, DELETE, POST CHARACTER/PLANET/VEHICLE FAVORITE
 # DELETE CHARACTER/PLANET/VEHICLE FAVORITE)
 
-@app.route('/user/favorite', methods=['GET'])
-def get_users_favorites():
-    user_favorites = Favorite.query.all()
-    user_fav_serialized = list(map(lambda fav: fav.serialize(), user_favorites))
-    return jsonify({"user_favorites": user_fav_serialized}), 200
-
 @app.route('/user', methods=['POST'])
 def create_user():
     #aca vendría lo que se indica desde React
