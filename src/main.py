@@ -62,13 +62,12 @@ def get_one_user(user_id):
     user = User.query.filter_by(id=user_id).first() 
     return jsonify ({"response": user.serialize()}), 200
 
-@app.route('/user/<int:user_id>/favorite', methods=['GET'])
+@app.route('/user/<int:user_id>/favorites', methods=['GET'])
 def get_one_user_favorites(user_id):
-    user = User.query.filter_by(id=user_id).first() 
-    user_favorites = Favorite(user_id = user_id)
-    db.session.add(user_favorites)
-    db.session.commit()
-    return jsonify ({"created": True, "User favorites": user_favorites.serialize()}), 200
+    favo = Favorite.query.filter(Favorite.user_id == user_id).all()
+    favo_serialized = list(map(lambda x: x.serialize(), favo))    
+    return jsonify ({"result": favo_serialized}), 200
+
 
 @app.route('/user/<int:user_id>', methods=['DELETE'])
 def delete_one_user(user_id):

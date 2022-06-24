@@ -9,7 +9,8 @@ class User(db.Model):
     username = db.Column(db.String(250), nullable=False, unique=True)
     email = db.Column(db.String(250), nullable=False, unique=True)
     password = db.Column(db.String(250))
-    favorite = db.relationship("Favorite", backref="User")   
+    favorite = db.relationship("Favorite", backref="User")
+       
     def __repr__(self):
         return "user: " + self.username
     
@@ -18,7 +19,8 @@ class User(db.Model):
             "id": self.id,
             "name": self.name,
             "username": self.username,
-            "email": self.email
+            "email": self.email,
+            "favorite": list(map(lambda favo: favo.serialize(), self.favorite))
         }
       
 class Character(db.Model):
@@ -92,7 +94,7 @@ class Favorite(db.Model):
             "user_id": self.user_id,
             "character_id": self.character_id,
             "planet_id": self.planet_id,
-            "vehicle_id": self.vehicle_id
+            "vehicle_id": self.vehicle_id,
         }    
 
     #def __repr__(self):
